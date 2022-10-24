@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  chirp_db:
+    image: postgres
+    volumes:
+      - ~/data/chirp_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  chirp:
+    image: chirpimage
+    build: .
+    command: >
+      sh -c "sleep 5 &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8001"
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - chirp_db
+  tweet_scraper:
+    image: chirpimage
+    command: ["python", "manage.py", "tweet_scraper"]
+    depends_on:
+      - chirp
+    environment:
+      - DJANGO_SETTINGS_MODULE=chirp.settings
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - TWEET_DURATION=20 #minutes
+    env_file: env
+  telegram_bot:
+    image: chirpimage
+    command: ["python", "manage.py", "telegrambot"]
+    depends_on:
+      - chirp
+    environment:
+      - DJANGO_SETTINGS_MODULE=chirp.settings
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    env_file: env
