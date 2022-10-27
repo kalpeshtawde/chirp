@@ -31,12 +31,13 @@ class UserTweets(Tweet):
 
     def get_params(self):
         return {
-            'tweet.fields': 'author_id,created_at',
-            'expansions': 'author_id',
-            'user.fields': 'name,username',
+            "tweet.fields": "author_id,created_at",
+            "expansions": "author_id",
+            "user.fields": "name,username",
             "start_time": self.start_date,
             "end_time": self.end_date,
             "pagination_token": self.next_token,
+            "exclude": "replies,retweets",
         }
 
     def bearer_oauth(self, r):

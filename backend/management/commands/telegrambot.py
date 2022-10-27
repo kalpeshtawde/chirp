@@ -102,7 +102,12 @@ class Command(BaseCommand):
 
             for t in tweets:
                 if t.user.id in data:
-                    status = obj.send_message(data[t.user.id], t.tweet.tweet)
+                    twitter_account = t.tweet.twitter_account.name
+                    message = f"From: {twitter_account}\n\n{t.tweet.tweet}"
+                    status = obj.send_message(
+                        data[t.user.id],
+                        message,
+                    )
                     if status:
                         t.message_sent = True
                         t.save()
