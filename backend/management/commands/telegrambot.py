@@ -91,7 +91,8 @@ class Command(BaseCommand):
 
             tweets = UserTweet.objects.filter(
                 Q(created_at__gte=timezone.now() - timedelta(minutes=20)) &
-                Q(message_sent=False)
+                Q(message_sent=False) &
+                Q(tweet__accept=True)
             ).order_by('created_at')
 
             data = {}

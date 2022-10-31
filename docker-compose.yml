@@ -51,3 +51,16 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     env_file: env
+  telegram_filter:
+    image: chirpimage
+    command: ["python", "manage.py", "tweet_filter"]
+    volumes:
+      - .:/code
+    depends_on:
+      - chirp
+    environment:
+      - DJANGO_SETTINGS_MODULE=chirp.settings
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    env_file: env

@@ -1,9 +1,22 @@
+import logging
+import time
+
 from django.core.management.base import BaseCommand
 
 from backend.models import Tweets, FilterKeywords
 
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__name__)
+
 
 class TweetRefiner:
+    
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def small_tweet(tweet):
+        return False if len(tweet.split(" ")) < 10 else True
 
     def run(self):
         accept = {}
@@ -42,10 +55,12 @@ class TweetRefiner:
                         t.accept = True
                         break
 
+            if t.accept:
+                log.info(f"Tweet [{tweet}] accepted to be sent")
+            else:
+                log.info(f"Tweet [{tweet}] rejected")
+                
             t.save()
-
-    def small_tweet(self, tweet):
-        return False if len(tweet.split(" ")) < 10 else True
 
 
 class Command(BaseCommand):
@@ -54,5 +69,8 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **option):
-        obj = TweetRefiner()
-        obj.run()
+        while True:
+            obj = TweetRefiner()
+            obj.run()
+            log.info("Sleeping for 5 minutes")
+            time.sleep(300)
