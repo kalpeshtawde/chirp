@@ -69,6 +69,8 @@ class Tweets(models.Model):
     tweet = models.CharField(max_length=512)
     tweet_created_at = models.DateTimeField()
     created_at = models.DateTimeField(default=timezone.now)
+    accept = models.BooleanField(null=True, blank=True)
+    filter_reason = models.CharField(max_length=512, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Tweets'
@@ -87,9 +89,21 @@ class UserTweet(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        verbose_name = 'UserTweet'
+        verbose_name = 'User Tweet'
 
     def __str__(self):
         return str(
             f"{self.user.first_name} : {self.tweet.tweet}"
         )
+
+
+class FilterKeywords(models.Model):
+    keyword = models.CharField(max_length=256, unique=True)
+    accept = models.BooleanField(default=False)
+    score = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Tweet Filters"
+
+    def __str__(self):
+        return str(f"{self.keyword} : {self.accept}")

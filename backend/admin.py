@@ -1,16 +1,26 @@
 from django.contrib import admin
 from backend.models import Company, UserCompany, TwitterAccount, \
-    CompanyTwitterAccount, Tweets, TelegramAccount, UserTweet
+    CompanyTwitterAccount, Tweets, TelegramAccount, UserTweet, FilterKeywords
+
+
+class TweetAdmin(admin.ModelAdmin):
+    list_display = ['twitter_account', 'tweet', 'accept', 'filter_reason',
+                    'tweet_created_at', 'created_at']
 
 
 class UserTweetAdmin(admin.ModelAdmin):
     list_display = ['user', 'message_sent', 'score', 'created_at', 'tweet']
 
 
+class FilterKeywordsAdmin(admin.ModelAdmin):
+    list_display = ['keyword', 'accept', 'score']
+
+
 admin.site.register(Company)
 admin.site.register(UserCompany)
 admin.site.register(TwitterAccount)
 admin.site.register(CompanyTwitterAccount)
-admin.site.register(Tweets)
+admin.site.register(Tweets, TweetAdmin)
 admin.site.register(TelegramAccount)
 admin.site.register(UserTweet, UserTweetAdmin)
+admin.site.register(FilterKeywords, FilterKeywordsAdmin)

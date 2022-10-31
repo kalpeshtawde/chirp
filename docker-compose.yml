@@ -41,6 +41,8 @@ services:
   telegram_bot:
     image: chirpimage
     command: ["python", "manage.py", "telegrambot"]
+    volumes:
+      - .:/code
     depends_on:
       - chirp
     environment:
