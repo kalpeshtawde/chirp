@@ -1,3 +1,4 @@
+import re
 import logging
 import time
 
@@ -40,7 +41,7 @@ class TweetRefiner:
             """
             if t.accept:
                 for k in accept:
-                    if accept[k] is False and k.lower() in tweet:
+                    if accept[k] is False and re.search(k.lower(), tweet):
                         t.accept = False
                         t.filter_reason = f"Tweet has unaccepted keyword [{k}]"
                         break
@@ -51,7 +52,7 @@ class TweetRefiner:
             """
             if not t.accept:
                 for k in score:
-                    if int(score[k]) == 100 and k.lower() in tweet:
+                    if int(score[k]) == 100 and re.search(k.lower(), tweet):
                         t.accept = True
                         break
 
