@@ -63,15 +63,18 @@ class TelegramBot:
     def send_message(self, chat_id, message):
         log.info("Sending messages")
         try:
-            url = f"https://api.telegram.org/bot" \
-                  f"{self.token}/sendMessage?chat_id={chat_id}&text" \
-                  f"={message}"
-            response = requests.get(url).json()
+            params = {
+                "chat_id": chat_id,
+                "text": f"<b><em>{message}</em></b>",
+                "parse_mode": "HTML",
+            }
+            url = f"https://api.telegram.org/bot{self.token}/sendMessage"
+            response = requests.get(url, params=params).json()
             if response['ok']:
                 log.info(f"Message sent successfully {response}")
                 return True
             else:
-                log.error(f"Message sent failed {response}")
+                log.error(f"Message send failed {response}")
         except Exception as error:
             log.error(f"Message sending failed for chat id {chat_id}, "
                       f"{error=}")
