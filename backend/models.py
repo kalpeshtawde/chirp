@@ -16,6 +16,14 @@ class TelegramAccount(models.Model):
         return str(self.user)
 
 
+class Messages(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    update_id = models.BigIntegerField(unique=True, blank=True, null=True)
+    message_id = models.BigIntegerField(unique=True, blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+    text = models.TextField()
+
+
 class Company(models.Model):
     name = models.CharField(max_length=256, unique=True)
 
