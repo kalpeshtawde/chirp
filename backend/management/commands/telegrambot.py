@@ -49,9 +49,11 @@ class TelegramBot:
     def user_updates(self):
         log.info("Fetching user updates")
         try:
+            update_id = 1
             msg = Messages.objects.values('update_id').order_by(
                 '-update_id').first()
-            update_id = msg.get('update_id', 1)
+            if msg:
+                update_id = msg.get('update_id')
             url = f"https://api.telegram.org/bot" \
                   f"{self.token}/getUpdates?offset={update_id}"
             response = requests.get(url).json()
