@@ -21,10 +21,19 @@ class FilterKeywordsAdmin(admin.ModelAdmin):
     list_display = ['keyword', 'accept', 'score']
 
 
-admin.site.register(Company)
+class CompanyTweeterAccountInline(admin.TabularInline):
+    model = CompanyTwitterAccount
+
+
+class CompanyAdmin(admin.ModelAdmin):
+    inlines = [
+        CompanyTweeterAccountInline,
+    ]
+
+
+admin.site.register(Company, CompanyAdmin)
 admin.site.register(UserCompany)
 admin.site.register(TwitterAccount)
-admin.site.register(CompanyTwitterAccount)
 admin.site.register(Tweets, TweetAdmin)
 admin.site.register(TelegramAccount)
 admin.site.register(Messages, MessagesAdmin)
