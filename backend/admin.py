@@ -13,6 +13,14 @@ class MessagesAdmin(admin.ModelAdmin):
     list_display = ['user', 'date', 'text', 'update_id']
 
 
+class UserCompanyAdmin(admin.ModelAdmin):
+    list_display = ['user', 'company']
+
+
+class TwitterAccountAdmin(admin.ModelAdmin):
+    list_display = ['acct_id', 'username', 'name']
+
+
 class UserTweetAdmin(admin.ModelAdmin):
     list_display = ['user', 'message_sent', 'score', 'created_at', 'tweet']
 
@@ -32,8 +40,8 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Company, CompanyAdmin)
-admin.site.register(UserCompany)
-admin.site.register(TwitterAccount)
+admin.site.register(UserCompany, UserCompanyAdmin)
+admin.site.register(TwitterAccount, TwitterAccountAdmin)
 admin.site.register(Tweets, TweetAdmin)
 admin.site.register(TelegramAccount)
 admin.site.register(Messages, MessagesAdmin)
