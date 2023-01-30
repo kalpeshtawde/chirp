@@ -1,23 +1,18 @@
 import re
 import requests
 import logging
-import pandas as pd
 from bs4 import BeautifulSoup
-from datetime import datetime
 
 from django.core.management.base import BaseCommand
 
-from screener.models import Company, Results
+from screener.common.section import Section
 
-
-pd.options.plotting.backend = "plotly"
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
 class Screener:
-
     def __init__(self):
         self.data = {}
 
@@ -32,35 +27,6 @@ class Screener:
             text = text.strip().split(" ")
             data[text[0]] = text[-1]
         self.data["top_ratios"] = data
-
-    def process_quarters(self, data, index, columns):
-        df = pd.DataFrame(
-            data,
-            index=index,
-            columns=columns
-        )
-        company = Company.objects.all().first()
-        for idx, col in df.iteritems():
-            print(col["Operating Profit"])
-            results = Results(
-                company=company,
-                date=datetime.strftime(
-                    datetime.strptime(col.name, '%b %Y'), '%Y-%m-%d'
-                ),
-                sales=col["Sales"],
-                expenses=col["Expenses"],
-                operating_profit=col["Operating Profit"],
-                opm=col["OPM"],
-                other_income=col["Other Income"],
-                interest=col["Interest"],
-                depreciation=col["Depreciation"],
-                profit_before_tax=col["Profit before tax"],
-                tax=col["Tax"],
-                net_profit=col["Net Profit"],
-                eps=col["EPS in Rs"],
-                unit="CR",
-            )
-            results.save()
 
     def process_section(self, soup, section_id):
         try:
@@ -93,7 +59,9 @@ class Screener:
                     data.append(row)
 
             if data:
-                self.process_quarters(data, index, columns)
+                section = Section()
+                print(section_id)
+                section.process(section_id, data, index, columns)
         except Exception as error:
             log.error(
                 f"Parsing failed for section {section_id} with error {error}"
@@ -123,8 +91,8 @@ class Command(BaseCommand):
         )
         obj.get_top_ratios(soup_obj)
         obj.process_section(soup_obj, "quarters")
-        # obj.process_section(soup, "profit-loss")
-        # obj.process_section(soup, "balance-sheet")
-        # obj.process_section(soup, "cash-flow")
-        # obj.process_section(soup, "ratios")
-        # obj.process_section(soup, "shareholding")
+        #obj.process_section(soup_obj, "profit-loss")
+        obj.process_section(soup_obj, "balance-sheet")
+        obj.process_section(soup_obj, "ratios")
+        obj.process_section(soup_obj, "cash-flow")
+        obj.process_section(soup_obj, "shareholding")
