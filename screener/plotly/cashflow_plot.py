@@ -4,6 +4,8 @@ import pandas as pd
 from screener.models import CashFlow
 from screener.plotly.common import get_layout
 
+from screener.plotly.common import get_color_sequence
+
 
 def cashflow():
     shr = CashFlow.objects.all()
@@ -23,7 +25,7 @@ def cashflow():
     fig = px.line(
         df,
         title="Cash Flow (INR Cr.)",
-        color_discrete_sequence=['#15616D', '#E06C00', '#ACD2ED', '#C94057'],
+        color_discrete_sequence=get_color_sequence(),
         markers=True,
     )
 

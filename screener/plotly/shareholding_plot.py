@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 from screener.models import Shareholding
 from screener.plotly.common import get_layout
 
+from screener.plotly.common import get_color_sequence
+
 
 def shareholding():
     shr = Shareholding.objects.all()
@@ -27,8 +29,7 @@ def shareholding():
     fig = px.line(
         df,
         title="Shareholding",
-        color_discrete_sequence=['#15616D', '#E06C00', '#ACD2ED', '#C94057',
-                                 '#77AF9C'],
+        color_discrete_sequence=get_color_sequence(),
         markers=True,
     )
 

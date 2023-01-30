@@ -25,8 +25,11 @@ app.layout = html.Div(children=[
         get_td("graph3", results_bar_fig),
     ], className='row'),
     html.Div([
-        get_td("graph1", shareholding_fig, "six columns"),
+        get_td("graph1", None, "six columns"),
         get_td("graph2", shareholding_pie_fig, "six columns"),
+    ], className='row'),
+    html.Div([
+        get_td("graph7", shareholding_fig),
     ], className='row'),
     html.Div([
         get_td("graph4", results_eps_area_fig),

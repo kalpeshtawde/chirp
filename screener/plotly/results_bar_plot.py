@@ -4,6 +4,8 @@ import pandas as pd
 from screener.models import Results
 from screener.plotly.common import get_layout
 
+from screener.plotly.common import get_color_sequence
+
 
 def results_bar():
     res = Results.objects.all()
@@ -31,14 +33,14 @@ def results_bar():
     fig = px.bar(
         df,
         title="Quarterly Results",
-        color_discrete_sequence=['#15616D', '#FFDDAD', '#E06C00'],
+        color_discrete_sequence=get_color_sequence(),
         barmode='group',
     )
 
     fig_eps = px.area(
         df_eps,
         title="Earning Per Share",
-        color_discrete_sequence=['#77AF96'],
+        color_discrete_sequence=get_color_sequence(),
         markers=True,
     )
 

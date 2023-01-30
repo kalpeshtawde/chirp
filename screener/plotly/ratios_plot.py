@@ -4,6 +4,8 @@ import pandas as pd
 from screener.models import Ratios
 from screener.plotly.common import get_layout
 
+from screener.plotly.common import get_color_sequence
+
 
 def ratios():
     res = Ratios.objects.all()
@@ -17,10 +19,10 @@ def ratios():
         ),
     )
 
-    fig_roce = px.area(
+    fig_roce = px.line(
         df_eps,
         title="Return On Capital Employed",
-        color_discrete_sequence=['#C94057'],
+        color_discrete_sequence=[get_color_sequence()[1]],
         markers=True,
     )
 
